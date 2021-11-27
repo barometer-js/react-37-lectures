@@ -1,17 +1,18 @@
 import PropTypes from 'prop-types';
+import s from './Painting.module.css';
 import defaultImg from './default.jpg';
 
 function Painting(props) {
   const {
     imageUrl = defaultImg,
     title,
-    author = 'no name',
+    author,
     profileUrl,
     price,
     quantity,
   } = props;
   return (
-    <div>
+    <div className={s.container}>
       <img src={imageUrl} alt={title} width="480" />
       <h2>{title}</h2>
       <p>
