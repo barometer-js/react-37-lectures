@@ -8,9 +8,11 @@
 // import Dropdown from './components/Dropdown';
 // import ColorPickerNew from './components/ColorPickerNew';
 import React, { Component } from 'react';
+// import ColorPickerNew from './components/ColorPickerNew';
 import TodoList from './components/TodoList';
+import Form from './components/Form';
 import initialTodos from './todos.json';
-
+import Container from './components/Container';
 // const colorPickerOptions = [
 //   { label: 'red', color: '#F44336' },
 //   { label: 'green', color: '#4CAF50' },
@@ -23,12 +25,17 @@ import initialTodos from './todos.json';
 class App extends Component {
   state = {
     todos: initialTodos,
+    inputValue: 'qweqwe',
   };
 
   deleteTodo = todoId => {
     this.setState(prevState => ({
       todos: prevState.todos.filter(todo => todo.id !== todoId),
     }));
+  };
+
+  formSubmitHendler = data => {
+    console.log(data);
   };
 
   render() {
@@ -41,27 +48,36 @@ class App extends Component {
     );
 
     return (
-      <>
-        <div>
+      <Container>
+        {/* <ColorPickerNew
+          options={[
+            { label: 'red', color: '#F44336' },
+            { label: 'green', color: '#4CAF50' },
+            { label: 'blue', color: '#2196F3' },
+            { label: 'grey', color: '#607D8B' },
+            { label: 'pink', color: '#E91E63' },
+            { label: 'indigo', color: '#3F51B5' },
+          ]}
+        /> */}
+        <Form onSubmit={this.formSubmitHendler} />
+        {/* <div>
           <p>Quantity: {totalTodoCount}</p>
           <p>Done: {completedTodoCount}</p>
-        </div>
+        </div> */}
         <TodoList todos={todos} onDeleteTodo={this.deleteTodo} />
-        {/* <ColorPickerNew options={colorPickerOptions} />
-        <Dropdown />
+        {/* <ColorPickerNew options={colorPickerOptions} /> */}
+        {/* <Dropdown />
         <Counter initialValue={10} /> */}
-        {/* <Container>
-        <Box type="small" classNames="big red" styles={{ color: '#ffffff' }} />
+        {/* <Box type="small" classNames="big red" styles={{ color: '#ffffff' }} />
         <Box type="medium" />
-        <Box type="large" />
+        <Box type="large" /> */}
 
-        <Alert text="Upcc!" type="success" />
+        {/* <Alert text="Upcc!" type="success" />
         <Alert text="Upcc!" type="warning" />
-        <Alert text="Upcc!" type="error" />
-        <ColorPicker options={colorPickerOptions} />
-        <PaintingList items={paintings} />
-      </Container> */}
-      </>
+        <Alert text="Upcc!" type="error" /> */}
+        {/* <ColorPicker options={colorPickerOptions} />
+        <PaintingList items={paintings} /> */}
+      </Container>
     );
   }
 }

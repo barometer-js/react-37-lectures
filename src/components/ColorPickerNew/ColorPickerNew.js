@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import classNames from 'classnames';
 import s from './ColorPickerNew.module.css';
 
 class ColorPickerNew extends Component {
@@ -11,13 +12,9 @@ class ColorPickerNew extends Component {
   };
 
   makeOptionClassName = index => {
-    const optionClasses = [s.ColorPickerNew__option];
-
-    if (index === this.state.activeOptionIdx) {
-      optionClasses.push(s.ColorPickerNew__option__active);
-    }
-
-    return optionClasses.join(' ');
+    return classNames(s.ColorPickerNew__option, {
+      [s.ColorPickerNew__option__active]: index === this.state.activeOptionIdx,
+    });
   };
 
   render() {
