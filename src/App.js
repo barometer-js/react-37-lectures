@@ -8,11 +8,15 @@
 // import Dropdown from './components/Dropdown';
 // import ColorPickerNew from './components/ColorPickerNew';
 import React, { Component } from 'react';
+import shortid from 'shortid';
 // import ColorPickerNew from './components/ColorPickerNew';
-import TodoList from './components/TodoList';
-import Form from './components/Form';
-import initialTodos from './todos.json';
+// import Counter from './components/Counter'
 import Container from './components/Container';
+import TodoList from './components/TodoList';
+import TodoEditor from './components/TodoEditor';
+import Filter from './components/Filter';
+// import Form from './components/Form';
+import initialTodos from './todos.json';
 // const colorPickerOptions = [
 //   { label: 'red', color: '#F44336' },
 //   { label: 'green', color: '#4CAF50' },
@@ -25,7 +29,19 @@ import Container from './components/Container';
 class App extends Component {
   state = {
     todos: initialTodos,
-    inputValue: 'qweqwe',
+    filter: '',
+  };
+
+  addTodo = text => {
+    const todo = {
+      id: shortid.generate(),
+      text,
+      completed: false,
+    };
+
+    this.setState(({ todos }) => ({
+      todos: [todo, ...todos],
+    }));
   };
 
   deleteTodo = todoId => {
@@ -34,18 +50,60 @@ class App extends Component {
     }));
   };
 
-  formSubmitHendler = data => {
-    console.log(data);
+  // formSubmitHendler = data => {
+  //   console.log(data);
+  // };
+
+  toggleCompleted = todoId => {
+    // console.log(todoId);
+
+    // this.setState(prevState => ({
+    //   todos: prevState.todos.map(todo => {
+    //     if (todo.id === todoId) {
+    //       return {
+    //         ...todo,
+    //         completed: !todo.completed,
+    //       };
+    //     }
+    //     return todo;
+    //   }),
+    // }));
+
+    this.setState(({ todos }) => ({
+      todos: todos.map(todo =>
+        todo.id === todoId ? { ...todo, completed: !todo.completed } : todo,
+      ),
+    }));
   };
 
-  render() {
+  changeFilter = e => {
+    this.setState({ filter: e.currentTarget.value });
+  };
+
+  getVisibleTodos = () => {
+    const { filter, todos } = this.state;
+
+    const normalizedFilter = filter.toLowerCase();
+
+    return todos.filter(todo =>
+      todo.text.toLowerCase().includes(normalizedFilter),
+    );
+  };
+
+  calculateCompletedTodos = () => {
     const { todos } = this.state;
 
-    const totalTodoCount = todos.length;
-    const completedTodoCount = todos.reduce(
+    return todos.reduce(
       (total, todo) => (todo.completed ? total + 1 : total),
       0,
     );
+  };
+
+  render() {
+    const { todos, filter } = this.state;
+    const totalTodoCount = todos.length;
+    const completedTodoCount = this.calculateCompletedTodos();
+    const visibleTodos = this.getVisibleTodos();
 
     return (
       <Container>
@@ -59,12 +117,20 @@ class App extends Component {
             { label: 'indigo', color: '#3F51B5' },
           ]}
         /> */}
-        <Form onSubmit={this.formSubmitHendler} />
-        {/* <div>
+        {/* <Form onSubmit={this.formSubmitHendler} /> */}
+        <div>
           <p>Quantity: {totalTodoCount}</p>
           <p>Done: {completedTodoCount}</p>
-        </div> */}
-        <TodoList todos={todos} onDeleteTodo={this.deleteTodo} />
+        </div>
+        <TodoEditor onSubmit={this.addTodo} />
+
+        <Filter value={filter} onChange={this.changeFilter} />
+
+        <TodoList
+          todos={visibleTodos}
+          onDeleteTodo={this.deleteTodo}
+          onToggleCompleted={this.toggleCompleted}
+        />
         {/* <ColorPickerNew options={colorPickerOptions} /> */}
         {/* <Dropdown />
         <Counter initialValue={10} /> */}
