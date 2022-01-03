@@ -15,6 +15,7 @@ import Container from './components/Container';
 import TodoList from './components/TodoList';
 import TodoEditor from './components/TodoEditor';
 import Filter from './components/Filter';
+import Modal from './components/Modal';
 // import Form from './components/Form';
 import initialTodos from './todos.json';
 // const colorPickerOptions = [
@@ -30,6 +31,7 @@ class App extends Component {
   state = {
     todos: initialTodos,
     filter: '',
+    showModal: false,
   };
 
   addTodo = text => {
@@ -99,14 +101,60 @@ class App extends Component {
     );
   };
 
+  componentDidMount() {
+    console.log('App ComponentDidMount');
+
+    const todos = localStorage.getItem('todos');
+    const parsedTodos = JSON.parse(todos);
+
+    if (parsedTodos) {
+      this.setState({ todos: parsedTodos });
+    }
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    console.log('App componentDidUpdate');
+
+    if (this.state.todos !== prevState.todos) {
+      console.log('Update todos');
+
+      localStorage.setItem('todos', JSON.stringify(this.state.todos));
+    }
+  }
+
+  toggleModal = () => {
+    this.setState(({ showModal }) => ({
+      showModal: !showModal,
+    }));
+  };
+
   render() {
-    const { todos, filter } = this.state;
+    console.log('App render');
+
+    const { todos, filter, showModal } = this.state;
     const totalTodoCount = todos.length;
     const completedTodoCount = this.calculateCompletedTodos();
     const visibleTodos = this.getVisibleTodos();
 
     return (
       <Container>
+        <button type="button" onClick={this.toggleModal}>
+          Open modal
+        </button>
+        {showModal && (
+          <Modal>
+            <h1>Hello, this is content of modal like children</h1>
+            <p>
+              Lorem ipsum dolor sit amet consectetur adipisicing elit. Amet
+              natus excepturi optio alias hic aut dolorem aperiam necessitatibus
+              eos unde.
+            </p>
+            <button type="button" onClick={this.toggleModal}>
+              Close
+            </button>
+          </Modal>
+        )}
+
         {/* <ColorPickerNew
           options={[
             { label: 'red', color: '#F44336' },
