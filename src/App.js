@@ -14,10 +14,15 @@ import shortid from 'shortid';
 import Container from './components/Container';
 import TodoList from './components/TodoList';
 import TodoEditor from './components/TodoEditor';
-import Filter from './components/Filter';
+import TodoFilter from './components/TodoFilter';
 import Modal from './components/Modal';
+import IconButton from './components/IconButton';
+import { ReactComponent as AddIcon } from './components/icons/add.svg';
+// import Clock from './components/Clock';
 // import Form from './components/Form';
 import initialTodos from './todos.json';
+// import Tabs from './components/Tabs/Tabs';
+// import tabs from './tabs.json';
 // const colorPickerOptions = [
 //   { label: 'red', color: '#F44336' },
 //   { label: 'green', color: '#4CAF50' },
@@ -138,11 +143,18 @@ class App extends Component {
 
     return (
       <Container>
-        <button type="button" onClick={this.toggleModal}>
+        {/* <Tabs items={tabs} /> */}
+        {/* {showModal && <Clock />} */}
+
+        <IconButton onClick={this.toggleModal}>
+          <AddIcon width="40" height="40" fill="white" />
+        </IconButton>
+
+        {/* <button type="button" onClick={this.toggleModal}>
           Open modal
-        </button>
+        </button> */}
         {showModal && (
-          <Modal>
+          <Modal onClose={this.toggleModal}>
             <h1>Hello, this is content of modal like children</h1>
             <p>
               Lorem ipsum dolor sit amet consectetur adipisicing elit. Amet
@@ -172,7 +184,7 @@ class App extends Component {
         </div>
         <TodoEditor onSubmit={this.addTodo} />
 
-        <Filter value={filter} onChange={this.changeFilter} />
+        <TodoFilter value={filter} onChange={this.changeFilter} />
 
         <TodoList
           todos={visibleTodos}
