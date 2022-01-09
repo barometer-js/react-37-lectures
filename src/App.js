@@ -118,12 +118,18 @@ class App extends Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    console.log('App componentDidUpdate');
+    // console.log('App componentDidUpdate');
+    const nextTodos = this.state.todos;
+    const prevTodos = prevState.todos;
 
-    if (this.state.todos !== prevState.todos) {
+    if (nextTodos !== prevTodos) {
       console.log('Update todos');
 
-      localStorage.setItem('todos', JSON.stringify(this.state.todos));
+      localStorage.setItem('todos', JSON.stringify(nextTodos));
+    }
+
+    if (nextTodos.length > prevTodos.length) {
+      this.toggleModal();
     }
   }
 
@@ -146,7 +152,7 @@ class App extends Component {
         {/* <Tabs items={tabs} /> */}
         {/* {showModal && <Clock />} */}
 
-        <IconButton onClick={this.toggleModal}>
+        <IconButton onClick={this.toggleModal} aria-label="Add todo">
           <AddIcon width="40" height="40" fill="white" />
         </IconButton>
 
@@ -155,15 +161,7 @@ class App extends Component {
         </button> */}
         {showModal && (
           <Modal onClose={this.toggleModal}>
-            <h1>Hello, this is content of modal like children</h1>
-            <p>
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Amet
-              natus excepturi optio alias hic aut dolorem aperiam necessitatibus
-              eos unde.
-            </p>
-            <button type="button" onClick={this.toggleModal}>
-              Close
-            </button>
+            <TodoEditor onSubmit={this.addTodo} />
           </Modal>
         )}
 
@@ -182,7 +180,6 @@ class App extends Component {
           <p>Quantity: {totalTodoCount}</p>
           <p>Done: {completedTodoCount}</p>
         </div>
-        <TodoEditor onSubmit={this.addTodo} />
 
         <TodoFilter value={filter} onChange={this.changeFilter} />
 
