@@ -1,6 +1,10 @@
 import React, { Component } from 'react';
+import { ToastContainer } from 'react-toastify';
+import { Slide } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import Container from './components/Container';
-// import { ToastContainer } from 'react-toastify';
+import PokemonForm from './components/PokemonForm';
+import PokemonInfo from './components/PokemonInfo';
 // import shortid from 'shortid';
 // import PaintingList from './components/paintingList';
 // import ColorPicker from './components/ColorPicker/ColorPicker';
@@ -35,8 +39,7 @@ import Container from './components/Container';
 
 class App extends Component {
   state = {
-    pokemon: null,
-    loading: false,
+    pokemonName: '',
     // todos: initialTodos,
     // filter: '',
     // showModal: false,
@@ -142,14 +145,9 @@ class App extends Component {
   //   }));
   // };
 
-  componentDidMount() {
-    this.setState({ loading: true });
-
-    fetch('https://pokeapi.co/api/v2/pokemon/ditto')
-      .then(res => res.json())
-      .then(pokemon => this.setState({ pokemon: pokemon }))
-      .finally(() => this.setState({ loading: false }));
-  }
+  handleFormSubmit = pokemonName => {
+    this.setState({ pokemonName });
+  };
 
   render() {
     // console.log('App render');
@@ -162,8 +160,20 @@ class App extends Component {
     return (
       <Container>
         <div style={{ maxWidth: 1170, margin: '0 auto', padding: 20 }}>
-          {this.state.loading && <h1>Loading...</h1>}
-          {this.state.pokemon && <div>{this.state.pokemon.name}</div>}
+          <PokemonForm onSubmit={this.handleFormSubmit} />
+          <PokemonInfo pokemonName={this.state.pokemonName} />
+          <ToastContainer
+            transition={Slide}
+            position="top-center"
+            autoClose={3000}
+            hideProgressBar={false}
+            newestOnTop={false}
+            closeOnClick
+            rtl={false}
+            pauseOnFocusLoss
+            draggable
+            pauseOnHover
+          />
         </div>
         {/* <Tabs items={tabs} /> */}
         {/* {showModal && <Clock />} */}
